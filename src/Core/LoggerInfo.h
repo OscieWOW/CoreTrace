@@ -13,11 +13,12 @@ namespace CoreTrace {
 	struct LoggerInfo {
 		std::string debugName;
 		bool includeName;
-		LoggerFormat format;
 
-		void genFormat(std::string formatString) {
+		LoggerFormat genFormat(std::string formatString) {
 			bool formatChar = false;
 			std::stringstream text;
+
+			LoggerFormat logFormat;
 
 			for(char token:formatString) {
 				if(formatChar) {
@@ -26,14 +27,14 @@ namespace CoreTrace {
 							LogFormatToken tk = {
 								.formatToken = 'M',
 							};
-							format.textFormat.push_back(tk);
+							logFormat.textFormat.push_back(tk);
 							break;
 						}	
 						case('N'): {
 							LogFormatToken tk = {
 								.formatToken = 'N'
 							};
-							format.textFormat.push_back(tk);
+							logFormat.textFormat.push_back(tk);
 							break;
 						}
 					}
@@ -47,10 +48,11 @@ namespace CoreTrace {
 						.formatToken = 'T',
 						.value = text.str()
 					};
-					format.textFormat.push_back(tk);
+					logFormat.textFormat.push_back(tk);
 					text.str("");
 				}
-			}	
+			}
+			return logFormat;
 		}	
 	};
 }

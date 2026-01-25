@@ -12,13 +12,13 @@ namespace CoreTrace {
 					m_info = info;
 				}
 
-				virtual void fatal(std::string message) = 0;
+				virtual void fatal(LoggerFormat format, std::string message) = 0;
 
-				virtual void warning(std::string message) = 0;
+				virtual void warning(LoggerFormat format, std::string message) = 0;
 	
-				virtual void message(std::string message) = 0;
+				virtual void message(LoggerFormat format, std::string message) = 0;
 	
-				virtual void trace(std::string message) = 0;
+				virtual void trace(LoggerFormat format, std::string message) = 0;
 	
 			private:
 				CoreTrace::LoggerInfo m_info;

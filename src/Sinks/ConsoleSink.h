@@ -7,12 +7,18 @@ namespace CoreTrace::Sinks {
 		public:
 			ConsoleSink() {}
 
-			void fatal(std::string message) override {}
+			std::string formatMessage(LoggerFormat format, std::string message) {
+				return message;
+			}
 
-			void warning(std::string message) override {}
+			void fatal(LoggerFormat format, std::string message) override {}
 
-			void message(std::string message) override {}
+			void warning(LoggerFormat format, std::string message) override {}
 
-			void trace(std::string message) override {std::cout << message << std::endl;}
+			void message(LoggerFormat format, std::string message) override {}
+
+			void trace(LoggerFormat format, std::string message) override {
+				std::cout << formatMessage(format, message) << std::endl;
+			}
 	}; 
 }
