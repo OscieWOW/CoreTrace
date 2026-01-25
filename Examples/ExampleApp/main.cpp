@@ -5,8 +5,8 @@ int main() {
 		.debugName = "CORE",
 		.includeName = true,
 	};
-	info.genFormat("[%N] %M");
 	CoreTrace::Logger log = CoreTrace::Logger(info);
+	log.init();
 	log.trace("Hi {}", 5);
 	return 0;
 }
