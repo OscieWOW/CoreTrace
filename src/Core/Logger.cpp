@@ -4,10 +4,10 @@ namespace CoreTrace {
 	void Logger::init() {
 		m_outputSink = std::make_shared<Sinks::ConsoleSink>();
 		m_outputSink->init(m_info);
-		traceFormat = genFormat("[%N] %M");
-		msgFormat = genFormat("[%N] %M");
-		warnFormat = genFormat("[%N] %M");
-		fatalFormat = genFormat("[%N] %M");
+		traceFormat = genFormat("%w[%N] %M");
+		msgFormat = genFormat("%g[%N] %M");
+		warnFormat = genFormat("%y[%N] %M");
+		fatalFormat = genFormat("%r[%N] %M");
 	}
 	LoggerFormat Logger::genFormat(std::string formatString) {
 			bool formatChar = false;
@@ -28,6 +28,38 @@ namespace CoreTrace {
 						case('N'): {
 							LogFormatToken tk = {
 								.formatToken = 'N'
+							};
+							logFormat.textFormat.push_back(tk);
+							break;
+						}
+						case('w'): {
+							LogFormatToken tk = {
+								.formatToken = 'C',
+								.value = "W"
+							};
+							logFormat.textFormat.push_back(tk);
+							break;
+						}
+						case('g'): {
+							LogFormatToken tk = {
+								.formatToken = 'C',
+								.value = "G"
+							};
+							logFormat.textFormat.push_back(tk);
+							break;
+						}
+						case('y'): {
+							LogFormatToken tk = {
+								.formatToken = 'C',
+								.value = "Y"
+							};
+							logFormat.textFormat.push_back(tk);
+							break;
+						}
+						case('r'): {
+							LogFormatToken tk = {
+								.formatToken = 'C',
+								.value = "R"
 							};
 							logFormat.textFormat.push_back(tk);
 							break;

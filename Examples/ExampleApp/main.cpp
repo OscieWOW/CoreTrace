@@ -7,6 +7,10 @@ int main() {
 	};
 	CoreTrace::Logger log = CoreTrace::Logger(info);
 	log.init();
-	log.trace("Hi {}", 5);
+
+	log.trace("Trace numer:{} ",16);
+	log.message("Message string: {}", "hello");
+	log.warning("Warning float:{}",3.14);
+	log.fatal("Fatal char:{}", 'p');
 	return 0;
 }
