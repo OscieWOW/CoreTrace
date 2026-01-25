@@ -20,7 +20,7 @@ namespace CoreTrace {
 	
 				virtual void trace(LoggerFormat format, std::string message) = 0;
 	
-			private:
+			protected:
 				CoreTrace::LoggerInfo m_info;
 		};
 	}
