@@ -19,6 +19,8 @@ namespace CoreTrace {
 				virtual void message(LoggerFormat format, std::string message) = 0;
 	
 				virtual void trace(LoggerFormat format, std::string message) = 0;
+
+				virtual void log(LoggerFormat format, std::string message) = 0;
 	
 			protected:
 				CoreTrace::LoggerInfo m_info;

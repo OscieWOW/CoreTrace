@@ -57,5 +57,9 @@ namespace CoreTrace::Sinks {
 			void trace(LoggerFormat format, std::string message) override {
 				std::cout << formatMessage(format, message) << std::endl;
 			}
+
+			void log(LoggerFormat format, std::string message) override {
+				std::cout << formatMessage(format, message) << std::endl;
+			}
 	}; 
 }

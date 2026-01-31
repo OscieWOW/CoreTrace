@@ -9,6 +9,11 @@ namespace CoreTrace {
 		warnFormat = genFormat("%y[%N] %M");
 		fatalFormat = genFormat("%r[%N] %M");
 	}
+
+	void Logger::setFormat(std::string formatName, std::string format) {
+		formats[formatName] = genFormat(format);
+	}
+
 	LoggerFormat Logger::genFormat(std::string formatString) {
 			bool formatChar = false;
 			std::stringstream text;
@@ -82,5 +87,11 @@ namespace CoreTrace {
 			return logFormat;
 		}
 	Logger::Logger(LoggerInfo info):m_info(info) {
-	}	
+	}
+	Logger::Logger(std::string name) {
+		m_info = {
+			.debugName = name,
+			.includeName = true
+		};
+	}
 }
