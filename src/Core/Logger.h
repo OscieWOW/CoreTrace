@@ -63,6 +63,8 @@ namespace CoreTrace {
 					m_outputSink->log(msgFormat, formatted);
 				}
 			}
+
+			std::string getName();
 			
 			LoggerFormat traceFormat;
 			LoggerFormat msgFormat;

@@ -94,4 +94,8 @@ namespace CoreTrace {
 			.includeName = true
 		};
 	}
+
+	std::string Logger::getName() {
+		return m_info.debugName;
+	}
 }

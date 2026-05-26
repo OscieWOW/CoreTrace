@@ -1,16 +1,23 @@
 #include <CoreTrace.h>
 
+int add(std::shared_ptr<CoreTrace::DebugQueue> dqueue, int num1, int num2) {
+	int fnID = dqueue->functionStart("add" ,0);
+	
+
+	int sum = num1 + num2;
+
+	dqueue->functionEnd(fnID);
+	return sum;
+}
+
 int main() {
-	CoreTrace::Logger log = CoreTrace::Logger("CORE");
-	log.init();
+	std::shared_ptr<CoreTrace::Logger> log = std::make_shared<CoreTrace::Logger>("CORE");
+	log->init();
 	
-	log.setFormat("myFormat","%r%M");
+	log->setFormat("myFormat","%r%M");
 	
-	log.log("myFormat","My custom format");
-	log.log("notAFormat","This is not a custom format so defaults to msgFormat");
-	log.trace("Trace numer:{} ",16);
-	log.message("Message string: {}", "hello");
-	log.warning("Warning float:{}",3.14);
-	log.fatal("Fatal char:{}", 'p');
+	std::shared_ptr<CoreTrace::DebugQueue> dqueue = std::make_shared<CoreTrace::DebugQueue>(log);
+
+	add(dqueue, 2, 100);
 	return 0;
 }
