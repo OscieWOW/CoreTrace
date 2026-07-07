@@ -8,9 +8,7 @@
 namespace CoreTrace {
 	class DebugQueue {
 		public:
-			DebugQueue(std::shared_ptr<Logger> logger):m_logger(logger) {
-				m_parameterPasser.setName(m_logger->getName());
-			};
+			DebugQueue(std::shared_ptr<Logger> logger):m_logger(logger) {};
 			
 			int functionStart(std::string name, int parentProcessID) {
 				DebugEvent e;
@@ -24,19 +22,36 @@ namespace CoreTrace {
 				return e.eventID;
 			}
 
-			void functionEnd(int eventID) {
-				m_events[eventID].functionSuccess = true;
-				m_events[eventID].functionEnd = std::chrono::system_clock::now();
-
-				m_logger->trace("{} eventID:{}",m_events[eventID].functionName, m_events[eventID].eventID);
-				auto duration = std::chrono::duration_cast<std::chrono::microseconds>(m_events[eventID].functionEnd - m_events[eventID].functionStart);
-
-				m_logger->trace("Event duration:{}",duration.count());
+			void functionEnd(int fnID) {
+				m_events[fnID].functionSuccess = true;
+				m_events[fnID].functionEnd = std::chrono::system_clock::now();
+				auto duration = std::chrono::duration_cast<std::chrono::microseconds>(m_events[fnID].functionEnd - m_events[fnID].functionStart);
+				
+				m_logger->trace("function {} eventID:{}",m_events[fnID].functionName, m_events[fnID].eventID);
+				m_logger->trace("Event duration:{} microseconds",duration.count());
+				for(Node param:m_events[fnID].functionParameters) {
+					m_logger->trace("Name: {}", param.name);
+					m_logger->trace("  |-> Type: {}", param.type);
+					m_logger->trace("  |-> Value: {}", param.value);
+				}
+				if(m_events[fnID].functionReturn) {
+					m_logger->trace("Return Value: {}", (*m_events[fnID].functionReturn).name);
+					m_logger->trace("  |-> Type: {}", (*m_events[fnID].functionReturn).type);
+					m_logger->trace("  |-> Value: {}", (*m_events[fnID].functionReturn).value);
+				}
 			}
 			
 			template <typename T>
-			void addParameter(T parameter, const std::string& paramName) {
-				m_parameterPasser.addParameter(parameter, paramName);
+			void addParameter(int fnID, T parameter, const std::string& paramName) {
+				Node param = m_parameterPasser.passParameter(parameter, paramName);
+				m_events[fnID].functionParameters.push_back(param);
+
+			}
+
+			template <typename T>
+			void addFunctionReturn(int fnID, T parameter, const std::string& paramName) {
+				Node returnNode = m_parameterPasser.passParameter(parameter, paramName);
+				m_events[fnID].functionReturn = returnNode;
 			}
 
 		private:

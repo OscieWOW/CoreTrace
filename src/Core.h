@@ -11,3 +11,4 @@
 #include <typeindex>
 #include <unordered_map>
 #include <functional>
+#include <optional>

@@ -2,10 +2,12 @@
 
 int add(std::shared_ptr<CoreTrace::DebugQueue> dqueue, int num1, int num2) {
 	int fnID = dqueue->functionStart("add" ,0);
-	
+	dqueue->addParameter(fnID, num1, "num1");
+	dqueue->addParameter(fnID, num2, "num2");
 
 	int sum = num1 + num2;
-
+	
+	dqueue->addFunctionReturn(fnID, sum, "sum");
 	dqueue->functionEnd(fnID);
 	return sum;
 }
