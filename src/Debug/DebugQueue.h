@@ -6,9 +6,10 @@
 #include "DebugEvent.h"
 
 namespace CoreTrace {
+	template <class Serialiser = Serialise>
 	class DebugQueue {
 		public:
-			DebugQueue(std::shared_ptr<Logger> logger):m_logger(logger) {};
+			DebugQueue(std::shared_ptr<Logger> logger, Serialiser parameterPasser = Serialise{}):m_logger(logger),m_parameterPasser(std::move(parameterPasser)) {};
 			
 			int functionStart(std::string name, int parentProcessID) {
 				DebugEvent e;
@@ -30,9 +31,7 @@ namespace CoreTrace {
 				m_logger->trace("function {} eventID:{}",m_events[fnID].functionName, m_events[fnID].eventID);
 				m_logger->trace("Event duration:{} microseconds",duration.count());
 				for(Node param:m_events[fnID].functionParameters) {
-					m_logger->trace("Name: {}", param.name);
-					m_logger->trace("  |-> Type: {}", param.type);
-					m_logger->trace("  |-> Value: {}", param.value);
+					printNode(param, 0);
 				}
 				if(m_events[fnID].functionReturn) {
 					m_logger->trace("Return Value: {}", (*m_events[fnID].functionReturn).name);
@@ -54,9 +53,39 @@ namespace CoreTrace {
 				m_events[fnID].functionReturn = returnNode;
 			}
 
+			void printNode(Node node, int depth) {
+				if(depth == 0) {
+					m_logger->trace("Name: {}", node.name);
+					m_logger->trace("|-> Type: {}", node.type);
+					m_logger->trace("|-> Value: {}", node.value);
+					m_logger->trace("|-> Depth: {}", depth);
+					if(node.childNodes.size() > 0) {
+						for(Node childNode:node.childNodes) {
+							printNode(childNode, depth+1);
+						}
+					}
+				} else {
+					std::stringstream margin;
+					margin << "|";
+					for(int i = 0; i < depth; i++) {
+						margin << "   |";
+					}
+					m_logger->trace("{}-> Name: {}",margin.str(), node.name);
+					//margin << "   |";
+					m_logger->trace("{}   |-> Type: {}", margin.str(), node.type);
+					m_logger->trace("{}   |-> Value: {}", margin.str(), node.value);
+					m_logger->trace("{}   |-> Depth: {}", margin.str(), depth);
+					if(node.childNodes.size() > 0) {
+						for(Node childNode:node.childNodes) {
+							printNode(childNode, depth+1);
+						}
+					}
+				}
+			}
+
 		private:
 			std::shared_ptr<Logger> m_logger;
 			std::vector<DebugEvent> m_events;
-			Serialise m_parameterPasser;
+			Serialiser m_parameterPasser;
 	};
 }

@@ -4,7 +4,7 @@
 
 namespace CoreTrace {
 	struct Node {
-		std::vector<int> childNodeID;
+		std::vector<Node> childNodes;
 
 		std::string name = "";
 		std::string type = "";
@@ -15,7 +15,7 @@ namespace CoreTrace {
 		public:
 			Serialise() = default;
 
-			Node passParameter(int paramValue, const std::string& paramName) {
+			Node passParameter(const int& paramValue, const std::string& paramName) {
 				Node node = {
 					.name = paramName,
 					.type = "INTEGER",
@@ -38,6 +38,20 @@ namespace CoreTrace {
 					.name = paramName,
 					.type = "CHAR",
 					.value = std::string(1, paramValue)
+				};
+				return node;
+			}
+			
+			template <typename T>
+			Node passParameter(const std::vector<T>& paramValue, const std::string& paramName) {
+				std::vector<Node> values;
+				for(const auto& value:paramValue) {
+					values.push_back(passParameter(value, ""));
+				}
+				Node node = {
+					.childNodes = values,
+					.name = paramName,
+					.type = "VECTOR"
 				};
 				return node;
 			}

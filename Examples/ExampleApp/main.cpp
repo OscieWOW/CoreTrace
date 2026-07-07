@@ -1,6 +1,6 @@
 #include <CoreTrace.h>
 
-int add(std::shared_ptr<CoreTrace::DebugQueue> dqueue, int num1, int num2) {
+int add(std::shared_ptr<CoreTrace::DebugQueue<>> dqueue, int num1, int num2) {
 	int fnID = dqueue->functionStart("add" ,0);
 	dqueue->addParameter(fnID, num1, "num1");
 	dqueue->addParameter(fnID, num2, "num2");
@@ -18,7 +18,7 @@ int main() {
 	
 	log->setFormat("myFormat","%r%M");
 	
-	std::shared_ptr<CoreTrace::DebugQueue> dqueue = std::make_shared<CoreTrace::DebugQueue>(log);
+	std::shared_ptr<CoreTrace::DebugQueue<>> dqueue = std::make_shared<CoreTrace::DebugQueue<>>(log);
 
 	add(dqueue, 2, 100);
 	return 0;
