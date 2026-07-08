@@ -11,7 +11,7 @@ namespace CoreTrace {
 			Logger(LoggerInfo info);
 			Logger(std::string name);
 
-			void init();
+			void init(std::shared_ptr<Sinks::ConsoleSink> sink = std::make_shared<Sinks::ConsoleSink>());
 			LoggerFormat genFormat(std::string formatString);
 			void setFormat(std::string formatName, std::string format);
 

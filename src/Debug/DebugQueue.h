@@ -35,8 +35,8 @@ namespace CoreTrace {
 				}
 				if(m_events[fnID].functionReturn) {
 					m_logger->trace("Return Value: {}", (*m_events[fnID].functionReturn).name);
-					m_logger->trace("  |-> Type: {}", (*m_events[fnID].functionReturn).type);
-					m_logger->trace("  |-> Value: {}", (*m_events[fnID].functionReturn).value);
+					m_logger->trace("|-> Type: {}", (*m_events[fnID].functionReturn).type);
+					m_logger->trace("|-> Value: {}", (*m_events[fnID].functionReturn).value);
 				}
 			}
 			
@@ -58,7 +58,6 @@ namespace CoreTrace {
 					m_logger->trace("Name: {}", node.name);
 					m_logger->trace("|-> Type: {}", node.type);
 					m_logger->trace("|-> Value: {}", node.value);
-					m_logger->trace("|-> Depth: {}", depth);
 					if(node.childNodes.size() > 0) {
 						for(Node childNode:node.childNodes) {
 							printNode(childNode, depth+1);
@@ -71,7 +70,6 @@ namespace CoreTrace {
 						margin << "   |";
 					}
 					m_logger->trace("{}-> Name: {}",margin.str(), node.name);
-					//margin << "   |";
 					m_logger->trace("{}   |-> Type: {}", margin.str(), node.type);
 					m_logger->trace("{}   |-> Value: {}", margin.str(), node.value);
 					m_logger->trace("{}   |-> Depth: {}", margin.str(), depth);
