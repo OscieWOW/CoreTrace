@@ -8,11 +8,10 @@
 namespace CoreTrace {
 	class Logger {
 		public:
-			Logger(LoggerInfo info);
 			Logger(std::string name);
 
 			void init(std::shared_ptr<Sinks::ConsoleSink> sink = std::make_shared<Sinks::ConsoleSink>());
-			LoggerFormat genFormat(std::string formatString);
+			LoggerFormat genFormat(std::string formatString, std::string colourFormatSet = "ANSI");
 			void setFormat(std::string formatName, std::string format);
 
 			template<typename... Args>
@@ -21,7 +20,8 @@ namespace CoreTrace {
 					std::string_view(message),
 					std::make_format_args(args...)
 				);
-				m_outputSink->trace(traceFormat, formatted);
+				formatted = format(formatted, traceFormat);
+				m_outputSink->trace(formatted);
 			}
 
 			template<typename... Args>
@@ -30,7 +30,8 @@ namespace CoreTrace {
 					std::string_view(message),
 					std::make_format_args(args...)
 				);
-				m_outputSink->message(msgFormat, formatted);
+				formatted = format(formatted, msgFormat);
+				m_outputSink->message(formatted);
 			}
 			
 			template<typename... Args>
@@ -39,7 +40,8 @@ namespace CoreTrace {
 					std::string_view(message),
 					std::make_format_args(args...)
 				);
-				m_outputSink->warning(warnFormat, formatted);
+				formatted = format(formatted, warnFormat);
+				m_outputSink->warning(formatted);
 			}
 
 			template<typename... Args>
@@ -48,7 +50,8 @@ namespace CoreTrace {
 					std::string_view(message),
 					std::make_format_args(args...)
 				);
-				m_outputSink->fatal(fatalFormat, formatted);
+				formatted = format(formatted, fatalFormat);
+				m_outputSink->fatal(formatted);
 			}
 
 			template<typename... Args>
@@ -57,12 +60,15 @@ namespace CoreTrace {
 					std::string_view(message),
 					std::make_format_args(args...)
 				);
-				if(formats.contains(formatName)) {
-					m_outputSink->log(formats[formatName], formatted);
+				if(m_formats.contains(formatName)) {
+					formatted = format(formatted, m_formats[formatName]);
+					m_outputSink->log(formatted);
 				} else {
-					m_outputSink->log(msgFormat, formatted);
+					m_outputSink->log(formatted);
 				}
 			}
+
+			std::string format(std::string msg, LoggerFormat format);
 
 			std::string getName();
 			
@@ -72,8 +78,8 @@ namespace CoreTrace {
 			LoggerFormat fatalFormat;
 		
 		private:
-			std::map<std::string, LoggerFormat> formats;
-			LoggerInfo m_info;
+			std::map<std::string, LoggerFormat> m_formats;
+			std::string m_debugName;
 			std::shared_ptr<Sinks::Sink> m_outputSink;
 	};
 }

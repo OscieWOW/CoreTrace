@@ -18,6 +18,12 @@ int main() {
 	
 	log->setFormat("myFormat","%r%M");
 	
+	log->trace("Trace");
+	log->message("Message");
+	log->warning("Warning");
+	log->fatal("Fatal");
+	log->log("myFormat", "myFormat");
+
 	std::shared_ptr<CoreTrace::DebugQueue<>> dqueue = std::make_shared<CoreTrace::DebugQueue<>>(log);
 
 	add(dqueue, 2, 100);

@@ -7,11 +7,10 @@ namespace CoreTrace {
 		char formatToken;
 		std::string value;
 	};
+
 	struct LoggerFormat {
 		std::vector<LogFormatToken> textFormat;
-	};
-	struct LoggerInfo {
-		std::string debugName;
-		bool includeName;
+
+		std::map<std::string, std::string> colourFormat;
 	};
 }

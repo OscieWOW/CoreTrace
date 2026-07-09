@@ -3,7 +3,7 @@
 namespace CoreTrace {
 	void Logger::init(std::shared_ptr<Sinks::ConsoleSink> sink) {
 		m_outputSink = sink;
-		m_outputSink->init(m_info);
+		m_outputSink->init(m_debugName);
 		traceFormat = genFormat("%w[%N] %M");
 		msgFormat = genFormat("%g[%N] %M");
 		warnFormat = genFormat("%y[%N] %M");
@@ -11,10 +11,10 @@ namespace CoreTrace {
 	}
 
 	void Logger::setFormat(std::string formatName, std::string format) {
-		formats[formatName] = genFormat(format);
+		m_formats[formatName] = genFormat(format);
 	}
 
-	LoggerFormat Logger::genFormat(std::string formatString) {
+	LoggerFormat Logger::genFormat(std::string formatString, std::string colourFormatSet) {
 			bool formatChar = false;
 			std::stringstream text;
 
@@ -84,18 +84,49 @@ namespace CoreTrace {
 					text.str("");
 				}
 			}
+			
+			if(colourFormatSet == "ANSI") {
+				logFormat.colourFormat = {
+					{"W", "\e[0;37m"},
+					{"G", "\e[0;32m"},
+					{"Y", "\e[0;93m"},
+					{"R", "\e[0;91m"}
+				};
+			}
+
 			return logFormat;
 		}
-	Logger::Logger(LoggerInfo info):m_info(info) {
-	}
-	Logger::Logger(std::string name) {
-		m_info = {
-			.debugName = name,
-			.includeName = true
-		};
+
+	Logger::Logger(std::string name):m_debugName(name) {}
+	
+	std::string Logger::format(std::string msg, LoggerFormat format) {
+		std::stringstream formatted;
+		
+		for(auto tk:format.textFormat) {
+			switch(tk.formatToken) {
+				case('M'): {
+					formatted << msg;
+					break;
+				}
+				case('N'): {
+					formatted << m_debugName;
+					break;
+				}
+				case('T'): {
+					formatted << tk.value;
+					break;
+				}
+				case('C'): {
+					formatted << format.colourFormat[tk.value];
+					break;
+				}
+			}
+		}
+		formatted << format.colourFormat["W"];
+		return formatted.str();
 	}
 
 	std::string Logger::getName() {
-		return m_info.debugName;
+		return m_debugName;
 	}
 }

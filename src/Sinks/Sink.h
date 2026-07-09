@@ -8,22 +8,22 @@ namespace CoreTrace {
 			public:
 				Sink() {}
 
-				void init(LoggerInfo info) {
-					m_info = info;
+				void init(std::string name) {
+					m_debugName = name;
 				}
 
-				virtual void fatal(LoggerFormat format, std::string message) = 0;
+				virtual void fatal(std::string message) = 0;
 
-				virtual void warning(LoggerFormat format, std::string message) = 0;
+				virtual void warning(std::string message) = 0;
 	
-				virtual void message(LoggerFormat format, std::string message) = 0;
+				virtual void message(std::string message) = 0;
 	
-				virtual void trace(LoggerFormat format, std::string message) = 0;
+				virtual void trace(std::string message) = 0;
 
-				virtual void log(LoggerFormat format, std::string message) = 0;
+				virtual void log(std::string message) = 0;
 	
 			protected:
-				CoreTrace::LoggerInfo m_info;
+				std::string m_debugName;
 		};
 	}
 }
