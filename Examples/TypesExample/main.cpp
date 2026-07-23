@@ -11,9 +11,9 @@ void greet(std::shared_ptr<CoreTrace::DebugQueue<TypeSerialise>> q, Person perso
 }
 
 int main() {
-	std::shared_ptr<CoreTrace::Logger> logger = std::make_shared<CoreTrace::Logger>("TYPE-EXAMPLE");
-	logger->init();
-	std::shared_ptr<CoreTrace::DebugQueue<TypeSerialise>> q = std::make_shared<CoreTrace::DebugQueue<TypeSerialise>>(logger, TypeSerialise{});
+	std::shared_ptr<CoreTrace::Sinks::SConsoleSink> ssink = std::make_shared<CoreTrace::Sinks::SConsoleSink>();
+	ssink->init("TYPE-EXAMLPE");
+	std::shared_ptr<CoreTrace::DebugQueue<TypeSerialise>> q = std::make_shared<CoreTrace::DebugQueue<TypeSerialise>>(ssink, TypeSerialise{});
 
 	Person person = {
 		.age = 16,

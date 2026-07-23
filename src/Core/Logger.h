@@ -10,7 +10,7 @@ namespace CoreTrace {
 		public:
 			Logger(std::string name);
 
-			void init(std::shared_ptr<Sinks::ConsoleSink> sink = std::make_shared<Sinks::ConsoleSink>());
+			void init(std::shared_ptr<Sinks::UConsoleSink> sink = std::make_shared<Sinks::UConsoleSink>());
 			LoggerFormat genFormat(std::string formatString, std::string colourFormatSet = "ANSI");
 			void setFormat(std::string formatName, std::string format);
 
@@ -80,6 +80,6 @@ namespace CoreTrace {
 		private:
 			std::map<std::string, LoggerFormat> m_formats;
 			std::string m_debugName;
-			std::shared_ptr<Sinks::Sink> m_outputSink;
+			std::shared_ptr<Sinks::USink> m_outputSink;
 	};
 }

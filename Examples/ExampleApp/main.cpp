@@ -24,7 +24,9 @@ int main() {
 	log->fatal("Fatal");
 	log->log("myFormat", "myFormat");
 
-	std::shared_ptr<CoreTrace::DebugQueue<>> dqueue = std::make_shared<CoreTrace::DebugQueue<>>(log);
+	std::shared_ptr<CoreTrace::Sinks::SConsoleSink> ssink = std::make_shared<CoreTrace::Sinks::SConsoleSink>();
+	ssink->init("CORE");
+	std::shared_ptr<CoreTrace::DebugQueue<>> dqueue = std::make_shared<CoreTrace::DebugQueue<>>(ssink);
 
 	add(dqueue, 2, 100);
 	return 0;

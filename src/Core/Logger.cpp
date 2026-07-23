@@ -1,7 +1,7 @@
 #include "Logger.h"
 
 namespace CoreTrace {
-	void Logger::init(std::shared_ptr<Sinks::ConsoleSink> sink) {
+	void Logger::init(std::shared_ptr<Sinks::UConsoleSink> sink) {
 		m_outputSink = sink;
 		m_outputSink->init(m_debugName);
 		traceFormat = genFormat("%w[%N] %M");

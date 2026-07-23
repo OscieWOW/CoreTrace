@@ -1,9 +1,16 @@
 #pragma once
 
 #include "../Core.h"
-#include "Serialise.h"
 
-namespace CoreTrace {
+namespace CoreTrace {	
+	struct Node {
+		std::vector<Node> childNodes;
+		
+		std::string name = "";
+		std::string type = "";
+		std::string value = "";
+	};
+
 	struct DebugEvent {
 		int eventID;
 		std::string functionName;
@@ -16,4 +23,6 @@ namespace CoreTrace {
 
 		
 	};
+
+
 }

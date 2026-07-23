@@ -1,14 +1,16 @@
 #pragma once
 
 #include "../Core/LoggerInfo.h"
+#include "../Debug/Serialise.h"
 
 namespace CoreTrace {
 	namespace Sinks {
-		class Sink {
+		class USink {
+			//The 'U' stands for "Unstructured"
 			public:
-				Sink() {}
+				USink() = default;
 
-				void init(std::string name) {
+				void init(const std::string& name) {
 					m_debugName = name;
 				}
 
@@ -22,6 +24,21 @@ namespace CoreTrace {
 
 				virtual void log(std::string message) = 0;
 	
+			protected:
+				std::string m_debugName;
+		};
+
+		class SSink {
+			//The 'S' stands for "Structured"
+			public:
+				SSink() = default;
+
+				void init(std::string name) {
+					m_debugName = name;
+				}
+
+				virtual void log(const Node& node) = 0;
+
 			protected:
 				std::string m_debugName;
 		};
