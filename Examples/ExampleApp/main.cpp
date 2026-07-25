@@ -1,22 +1,13 @@
 #include <CoreTrace.h>
 
-int add(std::shared_ptr<CoreTrace::DebugQueue<>> dqueue, int num1, int num2) {
-	int fnID = dqueue->functionStart("add" ,0);
-	dqueue->addParameter(fnID, num1, "num1");
-	dqueue->addParameter(fnID, num2, "num2");
-
-	int sum = num1 + num2;
-	
-	dqueue->addFunctionReturn(fnID, sum, "sum");
-	dqueue->functionEnd(fnID);
-	return sum;
-}
-
 int main() {
 	std::shared_ptr<CoreTrace::Logger> log = std::make_shared<CoreTrace::Logger>("CORE");
-	log->init();
 	
-	log->setFormat("myFormat","%r%M");
+	auto sink = std::make_shared<CoreTrace::Sinks::UFileSink>("CORE");
+	
+	log->init(sink, "NONE");
+	
+	log->setFormat("myFormat","<%N, %M>%", "NONE");
 	
 	log->trace("Trace");
 	log->message("Message");
@@ -24,10 +15,5 @@ int main() {
 	log->fatal("Fatal");
 	log->log("myFormat", "myFormat");
 
-	std::shared_ptr<CoreTrace::Sinks::SConsoleSink> ssink = std::make_shared<CoreTrace::Sinks::SConsoleSink>();
-	ssink->init("CORE");
-	std::shared_ptr<CoreTrace::DebugQueue<>> dqueue = std::make_shared<CoreTrace::DebugQueue<>>(ssink);
-
-	add(dqueue, 2, 100);
 	return 0;
 }

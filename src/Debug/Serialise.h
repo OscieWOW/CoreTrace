@@ -41,6 +41,7 @@ namespace CoreTrace {
 				for(const auto& value:paramValue) {
 					values.push_back(passParameter(value, ""));
 				}
+
 				Node node = {
 					.childNodes = values,
 					.name = paramName,

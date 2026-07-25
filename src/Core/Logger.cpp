@@ -1,17 +1,21 @@
 #include "Logger.h"
 
 namespace CoreTrace {
-	void Logger::init(std::shared_ptr<Sinks::UConsoleSink> sink) {
-		m_outputSink = sink;
-		m_outputSink->init(m_debugName);
-		traceFormat = genFormat("%w[%N] %M");
-		msgFormat = genFormat("%g[%N] %M");
-		warnFormat = genFormat("%y[%N] %M");
-		fatalFormat = genFormat("%r[%N] %M");
+	void Logger::init(std::shared_ptr<Sinks::USink> sink, const std::string& colourFormat) {
+		if(sink == nullptr) {
+			m_outputSink = std::make_shared<Sinks::UConsoleSink>("DEBUG");
+		} else {
+			sink->init();
+			m_outputSink = sink;
+		}
+		traceFormat = genFormat("%w[%N] %M", colourFormat);
+		msgFormat = genFormat("%g[%N] %M", colourFormat);
+		warnFormat = genFormat("%y[%N] %M", colourFormat);
+		fatalFormat = genFormat("%r[%N] %M", colourFormat);
 	}
 
-	void Logger::setFormat(std::string formatName, std::string format) {
-		m_formats[formatName] = genFormat(format);
+	void Logger::setFormat(const std::string& formatName, const std::string& format, const std::string& colourFormat) {
+		m_formats[formatName] = genFormat(format, colourFormat);
 	}
 
 	LoggerFormat Logger::genFormat(std::string formatString, std::string colourFormatSet) {
@@ -92,12 +96,19 @@ namespace CoreTrace {
 					{"Y", "\e[0;93m"},
 					{"R", "\e[0;91m"}
 				};
+			} else if(colourFormatSet == "NONE") {
+					logFormat.colourFormat = {
+						{"W", ""},
+						{"G", ""},
+						{"Y", ""},
+						{"R", ""}
+					};
 			}
 
 			return logFormat;
 		}
 
-	Logger::Logger(std::string name):m_debugName(name) {}
+	Logger::Logger(const std::string& name):m_debugName(name) {}
 	
 	std::string Logger::format(std::string msg, LoggerFormat format) {
 		std::stringstream formatted;

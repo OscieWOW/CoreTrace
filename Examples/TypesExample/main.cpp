@@ -11,8 +11,7 @@ void greet(std::shared_ptr<CoreTrace::DebugQueue<TypeSerialise>> q, Person perso
 }
 
 int main() {
-	std::shared_ptr<CoreTrace::Sinks::SConsoleSink> ssink = std::make_shared<CoreTrace::Sinks::SConsoleSink>();
-	ssink->init("TYPE-EXAMLPE");
+	std::shared_ptr<CoreTrace::Sinks::SFileSink> ssink = std::make_shared<CoreTrace::Sinks::SFileSink>("TYPE-EXAMPLE");
 	std::shared_ptr<CoreTrace::DebugQueue<TypeSerialise>> q = std::make_shared<CoreTrace::DebugQueue<TypeSerialise>>(ssink, TypeSerialise{});
 
 	Person person = {

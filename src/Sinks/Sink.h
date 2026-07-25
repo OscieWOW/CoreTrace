@@ -8,21 +8,23 @@ namespace CoreTrace {
 		class USink {
 			//The 'U' stands for "Unstructured"
 			public:
-				USink() = default;
-
-				void init(const std::string& name) {
+				USink(const std::string& name = "DEBUG"):m_debugName(name) {}
+				
+				void setName(const std::string& name) {
 					m_debugName = name;
 				}
 
-				virtual void fatal(std::string message) = 0;
+				virtual void init() = 0;
 
-				virtual void warning(std::string message) = 0;
-	
-				virtual void message(std::string message) = 0;
-	
-				virtual void trace(std::string message) = 0;
+				virtual void fatal(const std::string& message) = 0;
 
-				virtual void log(std::string message) = 0;
+				virtual void warning(const std::string& message) = 0;
+	
+				virtual void message(const std::string& message) = 0;
+	
+				virtual void trace(const std::string& message) = 0;
+
+				virtual void log(const std::string& message) = 0;
 	
 			protected:
 				std::string m_debugName;
@@ -31,11 +33,9 @@ namespace CoreTrace {
 		class SSink {
 			//The 'S' stands for "Structured"
 			public:
-				SSink() = default;
+				SSink(const std::string& name):m_debugName(name) {}
 
-				void init(std::string name) {
-					m_debugName = name;
-				}
+				virtual void init() = 0;
 
 				virtual void log(const Node& node) = 0;
 

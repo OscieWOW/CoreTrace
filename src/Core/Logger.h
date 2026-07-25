@@ -4,15 +4,16 @@
 #include "LoggerInfo.h"
 #include "../Sinks/Sink.h"
 #include "../Sinks/ConsoleSink.h"
+#include "../Sinks/FileSink.h"
 
 namespace CoreTrace {
 	class Logger {
 		public:
-			Logger(std::string name);
+			Logger(const std::string& name = "DEBUG");
 
-			void init(std::shared_ptr<Sinks::UConsoleSink> sink = std::make_shared<Sinks::UConsoleSink>());
+			void init(std::shared_ptr<Sinks::USink> sink = nullptr, const std::string& coloutFormat = "ANSI");
 			LoggerFormat genFormat(std::string formatString, std::string colourFormatSet = "ANSI");
-			void setFormat(std::string formatName, std::string format);
+			void setFormat(const std::string& formatName, const std::string& format, const std::string& colourFormat = "ANSI");
 
 			template<typename... Args>
 			void trace(std::string message, Args&&... args) {

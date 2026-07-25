@@ -5,40 +5,46 @@
 namespace CoreTrace::Sinks {
 	class UConsoleSink:public USink {
 		public:
-			UConsoleSink() = default;
+			UConsoleSink(const std::string& name):USink(name) {}
 
-			void fatal(std::string message) override {
+			void init() {}
+
+			void fatal(const std::string& message) override {
 				std::cout << message << std::endl;
 			}
 
-			void warning(std::string message) override {
+			void warning(const std::string& message) override {
 				std::cout << message << std::endl;
 			}
 
-			void message(std::string message) override {
+			void message(const std::string& message) override {
 				std::cout << message << std::endl;
 			}
 
-			void trace(std::string message) override {
+			void trace(const std::string& message) override {
 				std::cout << message << std::endl;
 			}
 
-			void log(std::string message) override {
+			void log(const std::string& message) override {
 				std::cout << message << std::endl;
 			}
 	};
 
 	class SConsoleSink: public SSink {
 		public:
+			SConsoleSink(const std::string& name):SSink(name) {}
+
 			void log(const Node& node) override {
 				printNode(node, 0);
 			}
 
+			void init () {}
+
 			void printNode(const Node& node, int depth) {
 				if(depth == 0) {
-					std::cout << "Name: " << node.name << std::endl;
-					std::cout << "|-> Type: " << node.type << std::endl;
-					std::cout << "|-> Value: " << node.value << std::endl;
+					if(node.name != "") std::cout << "Name: " << node.name << std::endl;
+					if(node.type != "") std::cout << "|-> Type: " << node.type << std::endl;
+					if(node.value != "") std::cout << "|-> Value: " << node.value << std::endl;
 					if(node.childNodes.size() > 0) {
 						for(Node childNode:node.childNodes) {
 							printNode(childNode, depth+1);
@@ -50,10 +56,9 @@ namespace CoreTrace::Sinks {
 					for(int i = 0; i < depth; i++) {
 						margin << "   |";
 					}
-					std::cout << margin.str() << "-> Name: " << node.name << std::endl;
-					std::cout << margin.str() << "   |-> Type: " << node.type << std::endl;
-					std::cout << margin.str() << "   |-> Value: " << node.value << std::endl;
-					std::cout << margin.str() << "   |-> Depth: " << depth << std::endl;
+					if(node.name != "") std::cout << margin.str() << "-> Name: " << node.name << std::endl;
+					if(node.type != "") std::cout << margin.str() << "   |-> Type: " << node.type << std::endl;
+					if(node.value != "") std::cout << margin.str() << "   |-> Value: " << node.value << std::endl;
 					if(node.childNodes.size() > 0) {
 						for(Node childNode:node.childNodes) {
 							printNode(childNode, depth+1);

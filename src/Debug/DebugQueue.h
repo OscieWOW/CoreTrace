@@ -9,7 +9,9 @@ namespace CoreTrace {
 	template <class Serialiser = Serialise>
 	class DebugQueue {
 		public:
-			DebugQueue(std::shared_ptr<Sinks::SSink> logger, Serialiser parameterPasser = Serialise{}):m_logger(logger),m_parameterPasser(std::move(parameterPasser)) {};
+			DebugQueue(std::shared_ptr<Sinks::SSink> logger, Serialiser parameterPasser = Serialise{}):m_logger(logger),m_parameterPasser(std::move(parameterPasser)) {
+				m_logger->init();
+			};
 			
 			int functionStart(std::string name, int parentProcessID) {
 				DebugEvent e;
