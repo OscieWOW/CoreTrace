@@ -8,10 +8,10 @@ namespace CoreTrace {
 			sink->init();
 			m_outputSink = sink;
 		}
-		traceFormat = genFormat("%w[%N] %M", colourFormat);
-		msgFormat = genFormat("%g[%N] %M", colourFormat);
-		warnFormat = genFormat("%y[%N] %M", colourFormat);
-		fatalFormat = genFormat("%r[%N] %M", colourFormat);
+		traceFormat = genFormat("%w[%N %D %T] %M", colourFormat);
+		msgFormat = genFormat("%g[%N %D %T] %M", colourFormat);
+		warnFormat = genFormat("%y[%N %D %T] %M", colourFormat);
+		fatalFormat = genFormat("%r[%N %D %T] %M", colourFormat);
 	}
 
 	void Logger::setFormat(const std::string& formatName, const std::string& format, const std::string& colourFormat) {
@@ -37,6 +37,20 @@ namespace CoreTrace {
 						case('N'): {
 							LogFormatToken tk = {
 								.formatToken = 'N'
+							};
+							logFormat.textFormat.push_back(tk);
+							break;
+						}
+						case('T'): {
+							LogFormatToken tk = {
+								.formatToken = 't'
+							};
+							logFormat.textFormat.push_back(tk);
+							break;
+						}
+						case('D'): {
+							LogFormatToken tk = {
+								.formatToken = 'D'
 							};
 							logFormat.textFormat.push_back(tk);
 							break;
@@ -129,6 +143,34 @@ namespace CoreTrace {
 				}
 				case('C'): {
 					formatted << format.colourFormat[tk.value];
+					break;
+				}
+				case('t'): {
+					auto now = std::chrono::system_clock::now();
+					std::time_t nowC = std::chrono::system_clock::to_time_t(now);
+					struct tm buf;
+
+					#if defined(_MSC_VER)
+						localtime_s(&buf, &nowC);
+					#else
+						localtime_r(&nowC, &buf);
+					#endif
+					
+					formatted << buf.tm_hour << ":" << buf.tm_min << ":" << buf.tm_sec;
+					break;
+				}
+				case('D'): {
+					auto now = std::chrono::system_clock::now();
+					std::time_t nowC = std::chrono::system_clock::to_time_t(now);
+					struct tm buf;
+
+					#if defined(_MSC_VER)
+						localtime_s(&buf, &nowC);
+					#else
+						localtime_r(&nowC, &buf);
+					#endif
+
+					formatted << buf.tm_mday << "/" << std::to_string(1 + buf.tm_mon) << "/" << std::to_string(1900 + buf.tm_year);
 					break;
 				}
 			}
