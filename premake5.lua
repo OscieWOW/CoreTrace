@@ -12,8 +12,8 @@ project "CoreTrace"
 	objdir("bin-int/"..outputDir.."/%{prj.name}")
 
 	files {
-		"src/**.cpp",
-		"src/**.h"
+		"CoreTrace/**.cpp",
+		"CoreTrace/**.h"
 	}
 
 	filter "system:linux"
@@ -48,7 +48,7 @@ project "ExampleApp"
 	}
 
 	includedirs {
-		"src/"
+		"CoreTrace/"
 	}
 
 	links {
@@ -87,7 +87,7 @@ project "TypesExample"
 	}
 
 	includedirs {
-		"src/"
+		"CoreTrace/"
 	}
 
 	links {
