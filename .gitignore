@@ -1,0 +1,8 @@
+bin/
+bin-int/
+
+*.txt
+.git*
+!.gitignore
+*.make
+Makefile

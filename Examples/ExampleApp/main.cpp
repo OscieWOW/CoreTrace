@@ -1,9 +1,9 @@
 #include <CoreTrace.h>
 
 int main() {
-	std::shared_ptr<CoreTrace::Logger> log = std::make_shared<CoreTrace::Logger>("CORE");
+	std::shared_ptr<CoreTrace::Logger> log = std::make_shared<CoreTrace::Logger>("CORE-SINK");
 	
-	auto sink = std::make_shared<CoreTrace::Sinks::UConsoleSink>("CORE");
+	auto sink = std::make_shared<CoreTrace::Sinks::UConsoleSink>("CORE-CONSOLE");
 	
 	log->init(sink);
 	
